@@ -4,7 +4,7 @@
     Author = 'Thales Pinto <ThalesORP@protonmail.com>'
     Copyright = '(c) 2023 Thales Pinto under the MIT license;'
     Description = 'Send a notification to disconnect the laptop when the battery reaches a certain threshold, thereby optimizing the lifespan of the battery'
-    FunctionsToExport = @('Install-BatteryNotifier', 'Start-BatteryNotifier', 'Set-MinBattery', 'Set-MaxBattery')
+    FunctionsToExport = @('Start-BatteryNotifier', 'Set-MinBattery', 'Set-MaxBattery')
     CmdletsToExport = @()
     AliasesToExport = @()
     RequiredModules = @("BurntToast")

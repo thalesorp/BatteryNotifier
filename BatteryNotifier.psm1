@@ -128,7 +128,6 @@ function Set-NotificationImage {
     Write-Settings -NotificationImagePath $imagePath
 }
 
-Export-ModuleMember -Function Install-BatteryNotifier
 Export-ModuleMember -Function Start-BatteryNotifier
 Export-ModuleMember -Function Set-MinBattery
 Export-ModuleMember -Function Set-MaxBattery
