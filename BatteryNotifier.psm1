@@ -46,8 +46,6 @@ function Write-Settings {
 }
 
 function Start-BatteryNotifier {
-    Read-Settings
-
     # Check if battery is present
     if ($(Get-WmiObject -Class Win32_Battery) -eq $null) {
         Write-Error "Windows API error. Maybe battery isn't connected?"
@@ -57,6 +55,8 @@ function Start-BatteryNotifier {
     $lastNotifiedPercentage = 0
 
     while ($true) {
+        Read-Settings
+
         $battery = Get-WmiObject -Class Win32_Battery
 
         switch ($battery.BatteryStatus) {
@@ -97,7 +97,6 @@ function Set-MinBattery {
         [Parameter(Mandatory=$true)][ValidateRange(0,100)][int]$minBattery
     )
 
-    Write-Host "Set-MinBattery = $minBattery"
     Write-Settings -minBattery $minBattery
 }
 
@@ -106,7 +105,6 @@ function Set-MaxBattery {
         [Parameter(Mandatory=$true)][ValidateRange(0,100)][int]$maxBattery
     )
 
-    Write-Host "Set-MaxBattery = $maxBattery"
     Write-Settings -maxBattery $maxBattery
 }
 
