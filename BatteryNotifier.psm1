@@ -34,13 +34,13 @@ function Write-Settings {
     param (
         [int]$maxBattery = $global:settings.MaxBattery,
         [int]$minBattery = $global:settings.MinBattery,
-        [string]$imagePath = $global:settings.NotificationImagePath
+        [string]$notificationImagePath = $global:settings.NotificationImagePath
     )
 
     $settingsObject = [PSCustomObject] @{
         MaxBattery = $maxBattery
         MinBattery = $minBattery
-        NotificationImagePath = $imagePath
+        NotificationImagePath = $notificationImagePath
     }
     $settingsObject | ConvertTo-Json | Out-File $global:settingsFilePath
 }
@@ -119,11 +119,10 @@ function Set-NotificationImage {
                 throw "The file '$_' is not a valid image."
             }
         })]
-        [string]$imagePath
+        [string]$notificationImagePath
     )
 
-    Write-Host "Set-NotificationImage = $imagePath"
-    Write-Settings -NotificationImagePath $imagePath
+    Write-Settings -NotificationImagePath $notificationImagePath
 }
 
 Export-ModuleMember -Function Start-BatteryNotifier
