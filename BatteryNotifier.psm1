@@ -1,21 +1,9 @@
 $global:settings = @{}
 $global:settingsFilePath = Join-Path $PSScriptRoot -ChildPath "Settings.json"
-$global:settings.Title = "Battery Notifier"
+$global:NotificationHeader = New-BTHeader -Id "Main" -Title "Battery Notifier"
 $global:settings.MaxBattery = 80
 $global:settings.MinBattery = 20
 $global:settings.NotificationImagePath = $null
-
-function Invoke-Notification {
-    param (
-        [Parameter(Mandatory=$true)][string]$message
-    )
-
-    if ($global:settings.NotificationImagePath -eq $null){
-        New-BurntToastNotification -Text $global:settings.Title, $message
-    } else {
-        New-BurntToastNotification -AppLogo $global:settings.NotificationImagePath -Text $global:settings.Title, $message
-    }
-}
 
 function Read-Settings {
     if (Test-Path -Path $global:settingsFilePath -PathType Leaf) {
@@ -64,7 +52,7 @@ function Start-BatteryNotifier {
             # Discharging
             1 {
                 if (($battery.EstimatedChargeRemaining -le $global:settings.MinBattery) -and ($battery.EstimatedChargeRemaining -ne $lastNotifiedPercentage)) {
-                    Invoke-Notification -Message "$($battery.EstimatedChargeRemaining)%🪫"
+                    New-BurntToastNotification -AppLogo $global:settings.NotificationImagePath -Text "Discharging...","$($battery.EstimatedChargeRemaining)%🪫" -UniqueIdentifier "MinBattery" -Header $global:NotificationHeader
                     $lastNotifiedPercentage = $battery.EstimatedChargeRemaining
                 }
                 Start-Sleep -Seconds 60
@@ -74,7 +62,7 @@ function Start-BatteryNotifier {
             # Charging
             2 {
                 if (($battery.EstimatedChargeRemaining -ge $global:settings.MaxBattery) -and ($battery.EstimatedChargeRemaining -ne $lastNotifiedPercentage)) {
-                    Invoke-Notification -Message "$($battery.EstimatedChargeRemaining)%🔋"
+                    New-BurntToastNotification -AppLogo $global:settings.NotificationImagePath -Text "Charging...","$($battery.EstimatedChargeRemaining)%🔋" -UniqueIdentifier "MaxBattery" -Header $global:NotificationHeader
                     $lastNotifiedPercentage = $battery.EstimatedChargeRemaining
                 }
                 Start-Sleep -Seconds 60
