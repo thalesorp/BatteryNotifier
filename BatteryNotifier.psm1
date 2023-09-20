@@ -40,7 +40,8 @@ function Start-BatteryNotifier {
         return
     }
 
-    $lastNotifiedPercentage = 0
+    $lastNotifiedMinBatteryPercentage = 0
+    $lastNotifiedMaxBatteryPercentage = 0
 
     while ($true) {
         Read-Settings
@@ -51,9 +52,10 @@ function Start-BatteryNotifier {
 
             # Discharging
             1 {
-                if (($battery.EstimatedChargeRemaining -le $global:settings.MinBattery) -and ($battery.EstimatedChargeRemaining -ne $lastNotifiedPercentage)) {
+                $lastMaxBatteryNotifiedPercentage = 0
+                if (($battery.EstimatedChargeRemaining -le $global:settings.MinBattery) -and ($battery.EstimatedChargeRemaining -ne $lastMinBatteryNotifiedPercentage)) {
                     New-BurntToastNotification -AppLogo $global:settings.NotificationImagePath -Text "Discharging...","$($battery.EstimatedChargeRemaining)%🪫" -UniqueIdentifier "MinBattery" -Header $global:NotificationHeader
-                    $lastNotifiedPercentage = $battery.EstimatedChargeRemaining
+                    $lastMinBatteryNotifiedPercentage = $battery.EstimatedChargeRemaining
                 }
                 Start-Sleep -Seconds 60
                 break
@@ -61,9 +63,10 @@ function Start-BatteryNotifier {
 
             # Charging
             2 {
-                if (($battery.EstimatedChargeRemaining -ge $global:settings.MaxBattery) -and ($battery.EstimatedChargeRemaining -ne $lastNotifiedPercentage)) {
+                $lastMinBatteryNotifiedPercentage = 0
+                if (($battery.EstimatedChargeRemaining -ge $global:settings.MaxBattery) -and ($battery.EstimatedChargeRemaining -ne $lastMaxBatteryNotifiedPercentage)) {
                     New-BurntToastNotification -AppLogo $global:settings.NotificationImagePath -Text "Charging...","$($battery.EstimatedChargeRemaining)%🔋" -UniqueIdentifier "MaxBattery" -Header $global:NotificationHeader
-                    $lastNotifiedPercentage = $battery.EstimatedChargeRemaining
+                    $lastMaxBatteryNotifiedPercentage = $battery.EstimatedChargeRemaining
                 }
                 Start-Sleep -Seconds 60
                 break
