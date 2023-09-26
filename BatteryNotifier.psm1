@@ -88,6 +88,7 @@ function Set-MinBattery {
         [Parameter(Mandatory=$true)][ValidateRange(0,100)][int]$minBattery
     )
 
+    Read-Settings
     Write-Settings -minBattery $minBattery
 }
 
@@ -96,6 +97,7 @@ function Set-MaxBattery {
         [Parameter(Mandatory=$true)][ValidateRange(0,100)][int]$maxBattery
     )
 
+    Read-Settings
     Write-Settings -maxBattery $maxBattery
 }
 
@@ -113,6 +115,7 @@ function Set-NotificationImage {
         [string]$notificationImagePath
     )
 
+    Read-Settings
     Write-Settings -NotificationImagePath $notificationImagePath
 }
 
